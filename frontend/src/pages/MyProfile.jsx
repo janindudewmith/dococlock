@@ -12,7 +12,7 @@ const MyProfile = () => {
   const updateUserProfileData = async () => {
     try {
       const formData = new FormData();
-      formData.append('userId', userData._id); // Added userId
+      formData.append('userId', userData._id);
       formData.append('name', userData.name);
       formData.append('phone', userData.phone);
       formData.append('address', JSON.stringify(userData.address));
@@ -26,12 +26,13 @@ const MyProfile = () => {
       const { data } = await axios.post(`${backendUrl}/api/user/update-profile`, formData, { headers: { token } });
       if (data.success) {
         toast.success(data.message);
-        setUserData(data.userData); // Update with backend response
+        setUserData(data.userData);
         setIsEdit(false);
         setImage(null);
       } else {
         toast.error(data.message);
       }
+
     } catch (error) {
       console.error('UpdateProfile Error:', error);
       toast.error(error.message || "Failed to update profile");
@@ -43,13 +44,13 @@ const MyProfile = () => {
       {isEdit ? (
         <label htmlFor="image">
           <div className='inline-block relative cursor-pointer'>
-            <img className='w-36 rounded opacity-75' src={image ? URL.createObjectURL(image) : userData.image} alt="Profile" />
-            <img className='w-10 absolute bottom-12 right-12' src={image ? '' : assets.upload_icon} alt="Upload" />
+            <img className='w-36 rounded opacity-75' src={image ? URL.createObjectURL(image) : userData.image || assets.upload_area} alt="Profile" />
+            <img className='w-10 absolute bottom-12 right-12' src={userData.image ? '' : assets.upload_icon} alt="Upload" />
           </div>
           <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden />
         </label>
       ) : (
-        <img className='w-36 rounded' src={userData.image} alt="Profile" />
+        <img className='w-36 rounded' src={userData.image || assets.upload_area} alt="Profile" />
       )}
 
       {isEdit ? (
@@ -116,6 +117,7 @@ const MyProfile = () => {
               onChange={(e) => setUserData(prev => ({ ...prev, gender: e.target.value }))}
               value={userData.gender}
             >
+              <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>

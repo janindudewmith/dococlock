@@ -50,7 +50,7 @@ const Navbar = () => {
             </button>
             <div className="relative group">
               <button className="bg-white border border-primary border-2 px-2 py-1 rounded-full flex items-center gap-2 hover:shadow-md transition-all duration-200">
-                <img className="w-8 h-8 rounded-full object-cover" src={userData.image || assets.default_profile} alt={`${userData.name}'s profile`} />
+                <img className="w-8 h-8 rounded-full object-cover" src={userData.image || assets.upload_area} alt={`${userData.name}'s profile`} />
                 <img className="w-2.5 transition-transform duration-200 group-hover:rotate-180" src={assets.dropdown_icon} alt="Dropdown menu" />
               </button>
               {/* Dropdown menu */}

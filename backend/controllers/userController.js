@@ -9,6 +9,7 @@ import userModel from '../models/userModel.js';
 // API to register user
 const registerUser = async (req, res) => {
   try {
+
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -33,6 +34,7 @@ const registerUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     console.log('Register successful, token:', token);
     res.json({ success: true, token });
+
   } catch (error) {
     console.error('Register Error:', error);
     res.json({ success: false, message: error.message });
@@ -86,6 +88,7 @@ const getProfile = async (req, res) => {
 // API to update user profile
 const updateProfile = async (req, res) => {
   try {
+
     const { userId, name, phone, address, dob, gender } = req.body;
     const imageFile = req.files?.image;
 
@@ -96,14 +99,22 @@ const updateProfile = async (req, res) => {
     const updateData = { name, phone, address: JSON.parse(address), dob, gender };
     if (imageFile) {
       const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: 'image' });
-      updateData.image = imageUpload.secure_url;
+      if (imageUpload?.secure_url) {
+        updateData.image = imageUpload.secure_url;
+      } else {
+        return res.json({ success: false, message: "Image upload failed" });
+      }
     }
 
-    await userModel.findByIdAndUpdate(userId, updateData);
-    const updatedUser = await userModel.findById(userId).select('-password');
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
 
     console.log('Profile updated for user:', userId);
     res.json({ success: true, message: "Profile Updated", userData: updatedUser });
+
   } catch (error) {
     console.error('UpdateProfile Error:', error);
     res.json({ success: false, message: error.message });
