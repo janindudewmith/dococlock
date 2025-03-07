@@ -173,12 +173,18 @@ const doctorProfile = async (req, res) => {
 // API to update doctor's profile
 const updateDoctorProfile = async (req, res) => {
   try {
+
     const { docId, fees, address, available } = req.body;
 
-    await doctorModel.findByIdAndUpdate(docId, { fees, address, available });
+    await doctorModel.findByIdAndUpdate(
+      docId,
+      { fees, address, available },
+      { new: true, runValidators: true }
+    ).select('-password');
 
-    console.log('Doctor profile updated:', docId); // Debug
+    console.log('Doctor profile updated:', docId);
     res.json({ success: true, message: "Profile Updated" });
+
   } catch (error) {
     console.log('UpdateDoctorProfile Error:', error);
     res.json({ success: false, message: error.message });
