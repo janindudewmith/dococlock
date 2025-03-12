@@ -95,7 +95,7 @@ export const doctors = [
         speciality: 'General Physician',
         degree: 'MBBS',
         experience: '4 years',
-        about: 'Dr. Richard James is a compassionate and experienced General Physician who prioritizes preventive medicine and patient-centered care. With four years of experience in family medicine, Dr. James is dedicated to helping patients achieve their health goals through personalized treatment plans. He has a strong focus on managing chronic conditions, offering health screenings, and providing lifestyle counseling. Dr. James believes in fostering long-term relationships with his patients, ensuring their well-being is consistently monitored and improved over time.',
+        about: 'Dr. Richard James is a compassionate and experienced General Physician who prioritizes preventive medicine and patient-centered care. With four years of experience in family medicine, Dr. James is dedicated to helping patients achieve their health goals through personalized treatment plans. He has a strong focus on managing chronic conditions, offering health screenings and providing lifestyle counseling. Dr. James believes in fostering long-term relationships with patients, ensuring their well-being is consistently monitored and improved over time.',
         fees: 70,
         address: {
             line1: '234, Willow Lane',
