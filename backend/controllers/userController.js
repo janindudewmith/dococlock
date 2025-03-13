@@ -69,6 +69,7 @@ const loginUser = async (req, res) => {
 // API to get user profile data
 const getProfile = async (req, res) => {
   try {
+
     const { userId } = req.body;
     console.log('GetProfile - UserID:', userId);
     const userData = await userModel.findById(userId).select('-password');
@@ -76,9 +77,9 @@ const getProfile = async (req, res) => {
     if (!userData) {
       return res.json({ success: false, message: "User not found" });
     }
-
     console.log('Profile sent:', userData);
     res.json({ success: true, userData });
+
   } catch (error) {
     console.error('GetProfile Error:', error);
     res.json({ success: false, message: error.message });
@@ -89,18 +90,21 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
 
-    const { userId, name, phone, address, dob, gender } = req.body;
-    const imageFile = req.files?.image;
+    const { userId, name, phone, address, dob, gender } = req.body
+    const imageFile = req.file
 
     if (!userId || !name || !phone || !dob || !gender) {
       return res.json({ success: false, message: "Data Missing" });
     }
 
     const updateData = { name, phone, address: JSON.parse(address), dob, gender };
+
     if (imageFile) {
-      const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: 'image' });
-      if (imageUpload?.secure_url) {
-        updateData.image = imageUpload.secure_url;
+      // upload image to cloudinary
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
+      const imageUrl = imageUpload.secure_url
+      if (imageUrl) {
+        updateData.image = imageUrl;
       } else {
         return res.json({ success: false, message: "Image upload failed" });
       }
